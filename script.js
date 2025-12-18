@@ -207,12 +207,12 @@
         const buttons = document.querySelectorAll('.btn, .c-button, .nav-link');
 
         buttons.forEach(btn => {
-            btn.addEventListener('mouseenter', function(e) {
+            btn.addEventListener('mouseenter', function() {
                 this.style.transition = 'all 0.3s ease-in-out';
                 this.style.transform = 'translateY(-2px)';
             });
 
-            btn.addEventListener('mouseleave', function(e) {
+            btn.addEventListener('mouseleave', function() {
                 this.style.transform = 'translateY(0)';
             });
 
@@ -338,11 +338,11 @@
                 message: 'Nachname muss 2-50 Zeichen enthalten (nur Buchstaben)'
             },
             email: {
-                pattern: /^[^s@]+@[^s@]+.[^s@]+$/,
+                pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                 message: 'Bitte geben Sie eine gültige E-Mail-Adresse ein'
             },
             phone: {
-                pattern: /^[ds+-()]{10,20}$/,
+                pattern: /^[\d\s+\-()]{10,20}$/,
                 message: 'Telefonnummer muss 10-20 Zeichen enthalten'
             },
             message: {
@@ -564,7 +564,7 @@
                                 to { opacity: 1; }
                             }
                             @keyframes slideUp {
-                                from { transform: translateY(30px); opacity: 0; }
+                                from { height: 0; max-height: calc(100vh - var(--header-h)); opacity: 1; }
                                 to { transform: translateY(0); opacity: 1; }
                             }
                         `;
@@ -585,13 +585,14 @@
                         modalContent.appendChild(closeBtn);
                         modalContent.appendChild(iframe);
                         modal.appendChild(modalContent);
+                        modal.addEventListener('transitionend', () => {
+                            if (!document.body.contains(modal)) {
+                                document.body.style.overflow = '';
+                            }
+                        });
                         document.body.appendChild(modal);
 
                         document.body.style.overflow = 'hidden';
-
-                        modal.addEventListener('remove', () => {
-                            document.body.style.overflow = '';
-                        });
                     }
                 });
             }
